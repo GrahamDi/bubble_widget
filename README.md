@@ -1,5 +1,9 @@
 Language: [English](README.md) | [中文简体](README-ZH.md)
 
+# UPDATE 20221213: Updated to null safety, English comments.
+
+A bubble shape widget.
+
 # bubble_widget
 
 A bubble shape widget.

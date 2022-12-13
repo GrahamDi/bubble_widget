@@ -4,7 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-/// 气泡组件
+/// Bubble component
 ///
 /// @author Peter
 ///
@@ -12,43 +12,44 @@ import 'package:flutter/material.dart';
 class BubbleWidget extends StatelessWidget {
   final Widget child;
 
-  /// child相对于气泡体的 padding
-  final EdgeInsetsGeometry padding;
+  /// childCompared to bubbles padding
+  final EdgeInsetsGeometry? padding;
 
-  /// 气泡样式， [BubbleStyle.stroke] 为描边式； [BubbleStyle.fill]为填充式
+  /// Bubble style， [BubbleStyle.stroke] For the sketch； [BubbleStyle.fill]For filling
   final BubbleStyle style;
 
-  /// 背景色
+  /// Background
   final Color color;
 
-  /// 描边颜色，[style] 为 [BubbleStyle.stroke] 时有效
+  /// Sketch color，[style] for [BubbleStyle.stroke] Time -effective
   final Color strokeColor;
 
-  /// 描边宽度，[style] 为 [BubbleStyle.stroke] 时有效
+  /// Sketch width，[style] for [BubbleStyle.stroke] Time -effective
   final double strokeWidth;
 
-  /// 气泡体圆角半径
+  /// Bubble Body rounded corner radius
   final double borderRadius;
 
-  /// 气泡尖角底部宽度
+  /// Bubble sharp corner width at the bottom of the corner
   final double arrowWidth;
 
-  /// 气泡尖角高度
+  /// Bubble sharp corner height
   final double arrowHeight;
 
-  /// 气泡尖角相对于气泡体的位置
+  /// The position of the foam tip of the bubble is relative to the bubble body
   final ArrowDirection direction;
 
-  /// 气泡尖角相对位置系数，0.0~1.0，左上角起算
+  /// Bubble sharp corner relative position coefficient，0.0~1.0，Starting from
+  /// the upper left corner
   final double positionRatio;
 
-  /// @see [Material]的[elevation]定义，z轴高度 </br>
+  /// @see [Material]of[elevation]Definition, Z axis height </br>
   /// The z-coordinate at which to place this material relative to its parent.
-  final double elevation;
+  final double? elevation;
 
   const BubbleWidget(
-      {Key key,
-      @required this.child,
+      {Key? key,
+      required this.child,
       this.padding,
       this.color = Colors.transparent,
       this.arrowWidth = 8.0,
@@ -85,7 +86,7 @@ class BubbleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
         color: color,
-        // 透明填充背景时，无需投影
+        // When a transparent filling background, no projection is required
         shadowColor: color == Colors.transparent
             ? Colors.transparent
             : const Color(0xFF000000),
@@ -107,21 +108,21 @@ enum ArrowDirection { left, top, right, bottom }
 
 enum BubbleStyle { stroke, fill }
 
-/// 参考资料：https://juejin.im/post/6844904082629459982
+/// Reference：https://juejin.im/post/6844904082629459982
 class BubbleShape extends ShapeBorder {
   final BubbleStyle style;
   final Color strokeColor;
   final double strokeWidth;
 
-  final ArrowDirection direction;
+  final ArrowDirection? direction;
 
-  /// 气泡尖角高度
+  /// Bubble sharp corner height
   final double arrowHeight;
 
-  /// 气泡尖角宽度（尖角底部大小）
+  /// Bubble sharp corner width (size at the bottom of the sharp corner)
   final double arrowWidth;
 
-  /// 气泡圆角半径
+  /// Bubble round corner radius
   final double borderRadius;
   final double positionRatio;
 
@@ -134,10 +135,12 @@ class BubbleShape extends ShapeBorder {
       this.arrowHeight = 5.0,
       this.arrowWidth = 8.0,
       this.borderRadius = 10.0})
-      : assert(positionRatio >= 0 && positionRatio <= 1, '气泡尖角位置系数必须是0-1范围'),
-        assert(direction != null, '气泡尖角方向不能为空');
+      : assert(positionRatio >= 0 && positionRatio <= 1,
+            'The position coefficient of the foam pointed angle must be 0-1 range'),
+        assert(direction != null,
+            'The direction of the foam pointed angle cannot be empty');
 
-  /// 修正不合规的尺寸: [arrowHeight]
+  /// Correct the size of the unsatisfactory compliance: [arrowHeight]
   getArrowHeightFit(Rect rect) {
     if (arrowHeight < 0) {
       return 0.0;
@@ -154,7 +157,7 @@ class BubbleShape extends ShapeBorder {
     return arrowHeight;
   }
 
-  /// 修正不合规的尺寸: [borderRadius]
+  /// Correct the size of the unsatisfactory compliance: [borderRadius]
   getBorderRadiusFit(Rect rect) {
     if (borderRadius < 0) {
       return 0.0;
@@ -172,7 +175,7 @@ class BubbleShape extends ShapeBorder {
     return borderRadius;
   }
 
-  /// 修正不合规的尺寸: [arrowWidth]
+  /// Correct the size of the unsatisfactory compliance: [arrowWidth]
   getArrowWidthFit(Rect rect) {
     if (arrowWidth < 0) {
       return 0.0;
@@ -190,7 +193,7 @@ class BubbleShape extends ShapeBorder {
     return arrowWidth;
   }
 
-  /// 修正不合规的尺寸: [positionRatio]
+  /// Correct the size of the unsatisfactory compliance: [positionRatio]
   getPositionRatioFit(Rect rect) {
     var borderRadiusFit = getBorderRadiusFit(rect);
     var arrowWidthFit = getArrowWidthFit(rect);
@@ -214,24 +217,42 @@ class BubbleShape extends ShapeBorder {
     return positionRatio;
   }
 
-  @override
-  EdgeInsetsGeometry get dimensions => null;
+  // @override
+  // EdgeInsetsGeometry? get dimensions => null;
+
+  // @override
+  // Path getInnerPath(Rect rect, {TextDirection? textDirection}) {
+  //   return null;
+  // }
+
+  // @override
+  // ShapeBorder scale(double t) {
+  //   return null;
+  // }
 
   @override
-  Path getInnerPath(Rect rect, {TextDirection textDirection}) {
-    return null;
+  EdgeInsetsGeometry get dimensions => throw UnimplementedError();
+
+  @override
+  Path getInnerPath(Rect rect, {TextDirection? textDirection}) {
+    throw UnimplementedError();
   }
 
-  /// 返回一个Path对象，也就是形状的裁剪
   @override
-  Path getOuterPath(Rect rect, {TextDirection textDirection}) {
+  ShapeBorder scale(double t) {
+    throw UnimplementedError();
+  }
+
+  /// Return to a Path object, that is, the cutting of the shape
+  @override
+  Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
     var path = Path();
     _addBubblePath(path, rect);
     return path;
   }
 
   @override
-  void paint(Canvas canvas, Rect rect, {TextDirection textDirection}) {
+  void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
     if (style == BubbleStyle.stroke) {
       var paint = Paint()
         ..color = strokeColor
@@ -244,12 +265,7 @@ class BubbleShape extends ShapeBorder {
     }
   }
 
-  @override
-  ShapeBorder scale(double t) {
-    return null;
-  }
-
-  /// 添加气泡路径
+  /// Add bubble path
   _addBubblePath(Path path, Rect rect) {
     var w = rect.width;
     var h = rect.height;
@@ -263,13 +279,13 @@ class BubbleShape extends ShapeBorder {
     var xOffsetEnd = direction == ArrowDirection.right ? arrowHeightFit : 0.0;
     var yOffSetEnd = direction == ArrowDirection.bottom ? arrowHeightFit : 0.0;
 
-    //尖角底部中心x坐标
+    // Speed at the bottom of the sharp corner X coordinates
     var xArrowCenter = positionRatioFit * w;
-    //尖角底部中心y坐标
+    // The bottom center of the sharp corner Y coordinates
     var yArrowCenter = positionRatioFit * h;
     path
       ..moveTo(xOffset, yOffSet + borderRadiusFit)
-      // 添加左上圆角
+      // Add the upper left round corner
       ..arcTo(
           Rect.fromCircle(
               center:
@@ -278,7 +294,7 @@ class BubbleShape extends ShapeBorder {
           pi,
           0.5 * pi,
           false);
-    // 添加上边
+    // Add
     if (direction == ArrowDirection.top) {
       path
         ..lineTo(xArrowCenter - 0.5 * arrowWidthFit, yOffSet)
@@ -286,7 +302,7 @@ class BubbleShape extends ShapeBorder {
         ..lineTo(xArrowCenter + 0.5 * arrowWidthFit, yOffSet);
     }
     path.lineTo(w - xOffsetEnd - borderRadiusFit, yOffSet);
-    // 添加右上角
+    // Add upper right corner
     path.arcTo(
         Rect.fromCircle(
             center: Offset(
@@ -295,7 +311,7 @@ class BubbleShape extends ShapeBorder {
         -0.5 * pi,
         0.5 * pi,
         false);
-    // 添加右边
+    // Add to the right
     if (direction == ArrowDirection.right) {
       path
         ..lineTo(w - xOffsetEnd, yArrowCenter - 0.5 * arrowWidthFit)
@@ -303,7 +319,7 @@ class BubbleShape extends ShapeBorder {
         ..lineTo(w - xOffsetEnd, yArrowCenter + 0.5 * arrowWidthFit);
     }
     path.lineTo(w - xOffsetEnd, h - yOffSetEnd - borderRadiusFit);
-    // 添加右下角
+    // Add the lower right corner
     path.arcTo(
         Rect.fromCircle(
             center: Offset(w - xOffsetEnd - borderRadiusFit,
@@ -312,7 +328,7 @@ class BubbleShape extends ShapeBorder {
         0,
         0.5 * pi,
         false);
-    // 添加下边
+    // Add below
     if (direction == ArrowDirection.bottom) {
       path
         ..lineTo(xArrowCenter + 0.5 * arrowWidthFit, h - yOffSetEnd)
@@ -320,7 +336,7 @@ class BubbleShape extends ShapeBorder {
         ..lineTo(xArrowCenter - 0.5 * arrowWidthFit, h - yOffSetEnd);
     }
     path.lineTo(xOffset + borderRadiusFit, h - yOffSetEnd);
-    // 添加左下角
+    // Add the lower left corner
     path.arcTo(
         Rect.fromCircle(
             center: Offset(
@@ -329,14 +345,14 @@ class BubbleShape extends ShapeBorder {
         0.5 * pi,
         0.5 * pi,
         false);
-    //添加左边
+    // Add left
     if (direction == ArrowDirection.left) {
       path
         ..lineTo(xOffset, yArrowCenter + 0.5 * arrowWidthFit)
         ..lineTo(0.0, yArrowCenter)
         ..lineTo(xOffset, yArrowCenter - 0.5 * arrowWidthFit);
     }
-    // 直接闪环即表示添加左边
+    // Direct flash ring means adding the left side
     path.close();
   }
 }
